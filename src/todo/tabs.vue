@@ -42,10 +42,10 @@
         },
         methods: {
             toggleFilter(state) {
-
+                this.$emit("toggle", state)
             },
             clearAllCompleted() {
-
+                this.$emit("clearAll")
 
             }
 

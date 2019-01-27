@@ -9,11 +9,11 @@
         />
         <Item
             :todo="todo"
-            v-for="todo in todos"
+            v-for="todo in filteredTodos"
             :key="todo.id"
             @del="deleteTodo"
         ></Item>
-        <Tab :filter="filter" :todos="todos"></Tab>
+        <Tab @toggle="toggleFilter" @clearAll="clearAllCompleted" :filter="filter" :todos="todos"></Tab>
     </section>
 </template>
 
@@ -32,6 +32,16 @@
             Item,
             Tab,
         },
+        computed: {
+            filteredTodos(){
+                if (this.filter === "all"){
+                    return this.todos
+                }
+                const completed = this.filter === "completed"
+                return this.todos.filter(todo => completed === todo.completed)
+            }
+
+        },
         methods:{
             addTodo(e){
                 this.todos.unshift({
@@ -43,6 +53,12 @@
             },
             deleteTodo(id){
                 this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
+            },
+            toggleFilter(state){
+                this.filter = state
+            },
+            clearAllCompleted(){
+                this.todos = this.todos.filter(todo => !todo.completed)
             }
         }
     }
